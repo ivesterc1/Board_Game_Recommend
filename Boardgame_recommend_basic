@@ -1,0 +1,123 @@
+import time
+
+#{Name: player count, type, mechanisms}
+#Coop
+coop = {"Gloomhaven": [4, ["Strategy", "Thematic"], ["Campaign", "Hand Management"]], 
+ "Spirit Island": [4, ["Strategy", "Thematic"], ["Hand Management"]],
+ "Pandemic": [4, ["Family", "Strategy"], ["Hand Management"]],
+ "Arkham Horror: The Card Game": [4, ["Thematic"], ["Campaign", "Hand Management"]],
+ "Too Many Bones": [4, ["Strategy", "Thematic"], ["Campaign", "Dice Rolling"]]}
+coop_by_type = {'s': ['Gloomhaven', 'Spirit Island', 'Pandemic', 'Too Many Bones'], 't': ['Gloomhaven', 'Spirit Island', 'Arkham Horror: The Card Game', 'Too Many Bones'], 'f': ['Pandemic']}
+coop_by_mech = {'c': ['Gloomhaven', 'Arkham Horror: The Card Game', 'Too Many Bones'], 'hm': ['Gloomhaven', 'Spirit Island', 'Pandemic', 'Arkham Horror: The Card Game'], 'dr': ['Too Many Bones']}
+
+#Comp
+comp = {"Brass: Birmingham": [4, ["Strategy"], ["Hand Management", "Income"]], 
+ "Ark Nova": [4, ["Strategy"], ["Hand Management", "Income"]], 
+ "Twilight Imperium": [6, ["Strategy", "Thematic"], ["Area Control", "Dice Rolling"]], 
+ "Terraforming Mars": [5, ["Strategy"], ["Hand Management", "Income"]], 
+ "War of the Ring": [4, ["Strategy", "Wargame"], ["Area Control", "Hand Management", "Dice Rolling"]],
+ "Wingspan": [5, ["Family", "Strategy"], ["Hand Management", "Dice Rolling"]]}
+comp_by_type = {'s': ['Brass: Birmingham', "Ark Nova", "Twilight Imperium", "Terraforming Mars", "War of the Ring", "Wingspan"], 't': ["Twilight Imperium"], 'wg': ["War of the Ring"], 'f': ["Wingspan"]}
+comp_by_mech = {'hm': ['Brass: Birmingham', "Ark Nova", "Terraforming Mars", "War of the Ring", "Wingspan"], 'i': ["Brass: Birmingham", "Ark Nova", "Terraforming Mars"], 'ac': ["Twilight Imperium", "War of the Ring"], 'dr': ["Twilight Imperium", "War of the Ring", "Wingspan"]}
+
+def coop_rec():
+    counter = 1
+    try:
+        player_count = int(input("\nPlease enter the number of players you have at your table.  "))
+
+        if player_count > 4:
+            oops = input("\nSorry we have no cooperative games of that size. Would you like to choose a different game? (y/n)  ")
+            if oops == 'y':
+                return BG_Rec()
+            else:
+                return
+        checker = True
+        if player_count <= 4:
+            while checker is True:
+                selection = input("\nWould you prefer to choose a game based on the type (thematic, family, etc) or by mechanism (dice rolling, campaign, etc)? Enter 't' for type or 'm' for mechanism  ")
+                if selection == 't':
+                    checker = False
+                    option = input("\nPlease select one of the following game types: 'Strategy', 'Thematic', or 'Family' (enter 's', 't', or 'f')  ")
+                    for i in coop_by_type[option]:
+                        print(f"\n{counter}. {i} is a {coop[i][1]} type of game for up to {coop[i][0]} players. Its main mechanism(s) of play are {coop[i][2]}.")
+                        counter += 1
+
+                elif selection == 'm':
+                    checker = False
+                    option = input("\nPlease choose from the following game mechanisms: 'Campaign', 'Hand Management', or 'Dice Rolling' (enter 'c', 'hm', or 'dr') ")
+                    for i in coop_by_mech[option]:
+                        print(f"\n{counter}. {i} is a {coop[i][1]} type of game for up to {coop[i][0]} players. Its main mechanism(s) of play are {coop[i][2]}.")
+                        counter += 1 
+
+                else:
+                    print("\nPlease enter a valid response! 't' for type or 'm' for mechanism")
+    except ValueError as ve:
+        print('\nPlease enter a valid number!')
+        coop_rec()
+
+
+def comp_rec():
+    counter = 1
+    try:
+        player_count = int(input("\nPlease enter the number of players you have at your table.  "))
+
+        if player_count > 6:
+            oops = input("\nSorry we have no competitvie games of that size. Would you like to choose a different game? (y/n)  ")
+            if oops == 'y':
+                return BG_Rec()
+            else:
+                return
+        checker = True
+        if player_count <= 6:
+            while checker is True:
+                selection = input("\nWould you prefer to choose a game based on the type (thematic, family, etc) or by mechanism (dice rolling, hand management, etc)? Enter 't' for type or 'm' for mechanism  ")
+                if selection == 't':
+                    checker = False
+                    option = input("\nPlease select one of the following game types: 'Strategy', 'Thematic', 'Wargame' or 'Family' (enter 's', 't', 'wg' or 'f')  ")
+                    for i in comp_by_type[option]:
+                        print(f"\n{counter}. {i} is a {comp[i][1]} type of game for up to {comp[i][0]} players. Its main mechanism(s) of play are {comp[i][2]}.")
+                        counter += 1
+
+                elif selection == 'm':
+                    checker = False
+                    option = input("\nPlease choose from the following game mechanisms: 'Hand Management', 'Income', 'Area Control', or 'Dice Rolling' (enter 'hm', 'i', 'ac' or 'dr') ")
+                    for i in comp_by_mech[option]:
+                        print(f"\n{counter}. {i} is a {comp[i][1]} type of game for up to {comp[i][0]} players. Its main mechanism(s) of play are {comp[i][2]}.")
+                        counter += 1
+
+                else:
+                    print("\nPlease enter a valid response! 't' for type or 'm' for mechanism")
+    except ValueError as ve:
+        print('\nPlease enter a valid number!')
+        coop_rec()
+
+
+def BG_Rec():
+    print("Welcome to the board game recommender!")
+    time.sleep(2)
+    cc = input("\nTo begin please indicate if you're looking for a competitive or cooperative game (Enter in 'comp' or 'coop')  ")
+    if cc == 'comp':
+        comp_rec()
+    elif cc == 'coop':
+        coop_rec()
+    else:
+        print("\nPlease enter either 'comp' or 'coop'")
+        BG_Rec()
+    
+    new_game_rec = input("\nWould you like another recommendation? (y/n)  ")
+    if new_game_rec == 'y':
+        BG_Rec()
+    else:
+        return
+
+class New_Game:
+    def __init__(self, name, player_count, type=[], mechanism=[]):
+        name = self.name
+        player_count = self.player_count
+        type = self.type
+        mechanism = self.mechanism
+
+    
+    
+
+BG_Rec()
